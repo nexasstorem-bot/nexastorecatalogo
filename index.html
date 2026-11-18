@@ -1,0 +1,378 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Nexa Store</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: coluna única de 480px, preto puro e amarelo vivo. Hero amarelo com a logo vetorizada, órbita fina e brilho passando pelo N. Animação contida: entradas suaves, revelação ao rolar, acordeão fluido, faixa lenta. */
+:root {
+  --ink: #000000;
+  --surface: #0e0e0e;
+  --line: #2b2b2b;
+  --white: #f7f7f2;
+  --muted: #a8a8a0;
+  --yellow: #ffd60a;
+  --yellow-ink: #100d00;
+  --font-display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --font-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  color-scheme: dark;
+  interpolate-size: allow-keywords;
+}
+* { box-sizing: border-box; }
+html { background: var(--ink); }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 22px 40px;
+}
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
+.wrap { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+
+/* Progresso de rolagem */
+.progress { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; right: 0; height: 2px; background: var(--yellow); transform-origin: 0 50%; transform: scaleX(0); z-index: 20; pointer-events: none; }
+@supports (animation-timeline: scroll()) {
+  .progress { animation: prog linear both; animation-timeline: scroll(root); }
+}
+@keyframes prog { to { transform: scaleX(1); } }
+
+/* Entradas */
+.in { animation: rise 1s var(--ease) backwards; animation-delay: var(--d, 0s); }
+@keyframes rise { from { opacity: 0; transform: translateY(18px); } }
+@supports (animation-timeline: view()) {
+  .reveal { animation-name: reveal; animation-fill-mode: both; animation-timing-function: linear; animation-timeline: view(); animation-range: entry 0% entry 45%; }
+}
+@keyframes reveal { from { opacity: .15; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+
+/* Hero */
+.hero {
+  position: relative; overflow: hidden; isolation: isolate;
+  background: var(--yellow); color: var(--yellow-ink);
+  border-radius: 28px; padding: 28px 22px 28px;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px;
+}
+.hero::before {
+  content: ""; position: absolute; z-index: -1; width: 190px; height: 190px; right: -84px; top: -84px;
+  background: #000; transform: rotate(45deg);
+  animation: corner 14s ease-in-out infinite alternate;
+}
+@keyframes corner { to { transform: rotate(80deg) scale(1.08); } }
+
+.pill { display: inline-flex; align-items: center; gap: 8px; background: #000; color: var(--yellow); border-radius: 999px; padding: 6px 14px; font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--yellow); animation: ping 2.6s ease-out infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(255,214,10,.7); } 70%, 100% { box-shadow: 0 0 0 8px rgba(255,214,10,0); } }
+
+.logo-wrap { position: relative; width: 108px; height: 108px; margin: 24px 0 18px; transition: transform .6s var(--ease); will-change: transform; }
+.orbit { position: absolute; inset: -22px; border-radius: 50%; border: 1px solid rgba(0,0,0,.3); animation: spin 24s linear infinite; }
+.orbit::after { content: ""; position: absolute; width: 7px; height: 7px; border-radius: 50%; background: #000; top: -4px; left: calc(50% - 3.5px); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.logo { position: relative; width: 108px; height: 108px; display: block; animation: float 7s ease-in-out infinite; filter: drop-shadow(0 8px 0 rgba(0,0,0,.12)); }
+@keyframes float { 50% { transform: translateY(-4px); } }
+.stripe { animation: draw 1.3s .35s cubic-bezier(.65, 0, .25, 1) backwards; }
+.wl { animation: slidel 1s .2s var(--ease) backwards; }
+.wr { animation: slider 1s .2s var(--ease) backwards; }
+@keyframes draw { from { clip-path: inset(0 100% 100% 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes slidel { from { transform: translateX(-6px); opacity: 0; } }
+@keyframes slider { from { transform: translateX(6px); opacity: 0; } }
+.glint { transform: translateX(-20px); animation: glint 7s 2.2s ease-in-out infinite; }
+@keyframes glint { 0% { transform: translateX(-20px); } 22%, 100% { transform: translateX(90px); } }
+
+.hero h1 { font-family: var(--font-display); font-weight: 900; font-size: 30px; letter-spacing: .01em; line-height: 1.12; margin: 0; }
+.hero h1 .line { display: block; overflow: hidden; padding-bottom: .06em; }
+.ch { display: inline-block; animation: up 1s calc(.25s + var(--i) * .05s) var(--ease) backwards; }
+.ch.sp { width: .32em; }
+@keyframes up { from { transform: translateY(110%); } }
+.tag { margin: 0; font-weight: 700; font-size: 16px; max-width: 28ch; text-wrap: balance; }
+.handle { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 13px; background: #000; color: var(--yellow); border-radius: 999px; padding: 8px 16px; transition: transform .4s var(--ease), background .3s ease, color .3s ease; }
+.handle:hover { transform: translateY(-2px); background: #fff; color: #000; }
+.handle svg { width: 16px; height: 16px; }
+
+/* CTA */
+.cta {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: var(--yellow); color: var(--yellow-ink);
+  border-radius: 18px; padding: 18px 20px; font-weight: 800; font-size: 17px;
+  transition: transform .5s var(--ease);
+}
+.cta:hover { transform: translateY(-2px); }
+.cta:active { transform: scale(.985); }
+.cta::after { content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 26%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.65), transparent); transform: skewX(-18deg); animation: shine 6s 1.5s ease-in-out infinite; }
+@keyframes shine { 0% { left: -40%; } 30%, 100% { left: 140%; } }
+.cta small { display: block; font-weight: 700; font-size: 12px; opacity: .72; }
+.cta svg { width: 28px; height: 28px; flex: none; transition: transform .5s var(--ease); }
+.cta:hover svg { transform: translateX(5px); }
+
+/* Faixa */
+.ticker { overflow: hidden; border-block: 1px solid #4a3f08; padding: 12px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.track { display: flex; width: max-content; animation: marquee 55s linear infinite; }
+.track span { font-family: var(--font-display); font-weight: 500; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--yellow); padding: 0 18px; white-space: nowrap; }
+.track i { width: 5px; height: 5px; background: var(--yellow); transform: rotate(45deg); align-self: center; flex: none; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* Avaliação */
+.review { display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid #5a4a0a; border-radius: 16px; padding: 14px 16px; transition: border-color .4s ease, translate .5s var(--ease); }
+.review:hover { border-color: var(--yellow); translate: 0 -2px; }
+.stars { display: flex; gap: 3px; flex: none; color: var(--yellow); }
+.stars svg { width: 15px; height: 15px; animation: dip 5s calc(var(--i) * .14s) ease-in-out infinite; }
+@keyframes dip { 0%, 22%, 100% { opacity: 1; transform: none; } 9% { opacity: .35; transform: translateY(-2px); } }
+.review .txt { flex: 1; min-width: 0; }
+.review .txt b { display: block; font-size: 15px; }
+.review .txt span { display: block; font-size: 12.5px; color: var(--muted); }
+.review .go { width: 20px; height: 20px; color: var(--yellow); flex: none; transition: transform .5s var(--ease); }
+.review:hover .go { transform: translateX(4px); }
+
+/* Serviços */
+.label { font-family: var(--font-display); font-weight: 700; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--yellow); margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+.label::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--yellow), transparent); }
+.list { display: flex; flex-direction: column; gap: 10px; }
+details { position: relative; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--surface); transition: border-color .4s ease, translate .5s var(--ease); }
+details:hover { border-color: #6b5a0c; translate: 3px 0; }
+details[open] { border-color: var(--yellow); }
+summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 14px; padding: 14px 16px; }
+summary::-webkit-details-marker { display: none; }
+.ico { width: 44px; height: 44px; border-radius: 12px; background: var(--yellow); color: var(--yellow-ink); display: grid; place-items: center; flex: none; transition: transform .5s var(--ease); }
+details:hover .ico { transform: scale(1.06) rotate(-4deg); }
+.ico svg { width: 22px; height: 22px; }
+.ttl { flex: 1; min-width: 0; }
+.ttl b { display: block; font-size: 15px; font-weight: 800; }
+.ttl span { display: block; font-size: 12.5px; color: var(--muted); }
+.chev { width: 18px; height: 18px; color: var(--muted); transition: transform .5s var(--ease), color .3s ease; flex: none; }
+details[open] .chev { transform: rotate(180deg); color: var(--yellow); }
+.body { padding: 0 16px 16px 74px; color: var(--muted); font-size: 14px; }
+.body ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.body li { position: relative; padding-left: 18px; }
+.body li::before { content: ""; position: absolute; left: 0; top: .55em; width: 7px; height: 7px; border-radius: 2px; background: var(--yellow); }
+@supports selector(details::details-content) {
+  details::details-content { block-size: 0; overflow: clip; transition: block-size .5s var(--ease), content-visibility .5s allow-discrete; }
+  details[open]::details-content { block-size: auto; }
+}
+
+/* NFC / QR */
+.tap { background: var(--surface); border: 1px solid #5a4a0a; border-radius: 22px; padding: 22px 20px; display: flex; flex-direction: column; gap: 14px; }
+.tap h2 { font-family: var(--font-display); font-weight: 700; font-size: 19px; line-height: 1.25; margin: 0; text-wrap: balance; }
+.tap h2 em { font-style: normal; color: var(--yellow); }
+.tap p { margin: 0; color: var(--muted); }
+.modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.mode { background: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.mode b { font-size: 14px; font-weight: 800; }
+.mode span { font-size: 12.5px; color: var(--muted); }
+.anim { position: relative; width: 56px; height: 56px; display: grid; place-items: center; color: var(--yellow); }
+.nfc .r { position: absolute; inset: 15px; border-radius: 50%; border: 1.5px solid var(--yellow); animation: wave 3.6s ease-out infinite; }
+.nfc .r:nth-child(2) { animation-delay: 1.2s; }
+.nfc .r:nth-child(3) { animation-delay: 2.4s; }
+.nfc .core { position: relative; width: 10px; height: 10px; border-radius: 50%; background: var(--yellow); }
+@keyframes wave { from { transform: scale(.6); opacity: 1; } to { transform: scale(2.1); opacity: 0; } }
+.qr svg { width: 44px; height: 44px; }
+.qr .scanline { position: absolute; left: 5px; right: 5px; height: 2px; background: var(--yellow); animation: qrscan 2.8s ease-in-out infinite alternate; }
+@keyframes qrscan { from { top: 9px; } to { top: 45px; } }
+
+/* Contato */
+.contact { text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.contact .label { align-self: stretch; }
+.contact .num { font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: .02em; color: var(--yellow); user-select: all; font-variant-numeric: tabular-nums; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.btn { border: 1px solid var(--line); background: var(--surface); color: var(--white); font: inherit; font-weight: 700; font-size: 14px; border-radius: 12px; padding: 11px 16px; cursor: pointer; transition: translate .5s var(--ease), border-color .3s ease; }
+.btn:hover { border-color: var(--yellow); translate: 0 -2px; }
+.btn.solid { background: var(--yellow); color: var(--yellow-ink); border-color: var(--yellow); }
+footer { text-align: center; color: var(--muted); font-size: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .track { flex-wrap: wrap; width: auto; }
+  .glint { display: none; }
+}
+</style>
+
+<div class="progress" aria-hidden="true"></div>
+
+<main class="wrap">
+  <header class="hero in">
+    <span class="pill"><i class="dot"></i>Visibilidade para empresas</span>
+    <div class="logo-wrap" id="lw">
+      <i class="orbit" aria-hidden="true"></i>
+      <svg class="logo" viewBox="0 0 96 96" role="img" aria-label="Logo Nexa Store">
+        <defs>
+          <clipPath id="nm">
+            <path d="M26.9 29.2H36.5L70.4 65.2V65.9H60.7Z"/>
+            <path d="M26.3 34.4V65.7L34.9 59.8V50.7L49 58Z"/>
+            <path d="M69.3 28.5L59.7 34.5V47.5L69.4 59.2Z"/>
+          </clipPath>
+          <linearGradient id="gl" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+            <stop offset=".5" stop-color="#fff" stop-opacity=".9"/>
+            <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <rect width="96" height="96" rx="23" fill="#000"/>
+        <g transform="translate(48 48) scale(1.3) translate(-48.2 -47.2)">
+          <path class="wl" d="M26.3 34.4V65.7L34.9 59.8V50.7L49 58Z" fill="#f7f7f2"/>
+          <path class="stripe" d="M26.9 29.2H36.5L70.4 65.2V65.9H60.7Z" fill="#ffd60a"/>
+          <path class="wr" d="M69.3 28.5L59.7 34.5V47.5L69.4 59.2Z" fill="#f7f7f2"/>
+          <g clip-path="url(#nm)"><g transform="skewX(-22)"><rect class="glint" x="8" y="24" width="12" height="46" fill="url(#gl)"/></g></g>
+        </g>
+      </svg>
+    </div>
+    <h1 aria-label="NEXA STORE">
+      <span class="line" aria-hidden="true"><span class="ch" style="--i:0">N</span><span class="ch" style="--i:1">E</span><span class="ch" style="--i:2">X</span><span class="ch" style="--i:3">A</span><span class="ch sp" style="--i:4"></span><span class="ch" style="--i:5">S</span><span class="ch" style="--i:6">T</span><span class="ch" style="--i:7">O</span><span class="ch" style="--i:8">R</span><span class="ch" style="--i:9">E</span></span>
+    </h1>
+    <p class="tag">Sua empresa mais visível no Instagram e no Google.</p>
+    <a class="handle" href="https://instagram.com/nexasstore.br" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      @nexasstore.br
+    </a>
+  </header>
+
+  <a class="cta in" style="--d:.15s" href="https://wa.me/5521987397675?text=Ol%C3%A1%2C%20vim%20pelo%20Instagram%20da%20Nexa%20Store%20e%20quero%20saber%20mais." target="_blank" rel="noopener">
+    <span>Pedir orçamento no WhatsApp<small>Resposta direta com a equipe Nexa</small></span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </a>
+
+  <div class="ticker in" style="--d:.3s" aria-hidden="true">
+    <div class="track">
+      <span>Social Mídia</span><i></i><span>Google Empresas</span><i></i><span>Cardápios Digitais</span><i></i><span>Catálogos</span><i></i><span>NFC</span><i></i><span>QR Code</span><i></i><span>Plaquinhas</span><i></i>
+      <span>Social Mídia</span><i></i><span>Google Empresas</span><i></i><span>Cardápios Digitais</span><i></i><span>Catálogos</span><i></i><span>NFC</span><i></i><span>QR Code</span><i></i><span>Plaquinhas</span><i></i>
+    </div>
+  </div>
+
+  <a class="review reveal" href="https://share.google/OAquC0Ht6a3SzPtiX" target="_blank" rel="noopener">
+    <span class="stars" aria-hidden="true">
+      <svg style="--i:0" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg>
+      <svg style="--i:1" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg>
+      <svg style="--i:2" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg>
+      <svg style="--i:3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg>
+      <svg style="--i:4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg>
+    </span>
+    <span class="txt"><b>Avalie a Nexa Store no Google</b><span>Sua avaliação ajuda muito a nossa empresa</span></span>
+    <svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </a>
+
+  <section>
+    <h2 class="label">Nossos serviços</h2>
+    <div class="list">
+      <details class="reveal" open>
+        <summary>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M8 15l3-4 2 2 3-4"/></svg></span>
+          <span class="ttl"><b>Social Mídia</b><span>Gestão completa do seu perfil</span></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="body"><ul><li>Artes para feed e stories</li><li>Identidade visual do perfil</li><li>Postagens com mais alcance e visibilidade</li></ul></div>
+      </details>
+
+      <details class="reveal">
+        <summary>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 10-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+          <span class="ttl"><b>Gerenciador do Google Empresas</b><span>Sua loja encontrada no Google</span></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="body"><ul><li>Criação do perfil da loja no Google</li><li>Gerenciamento e atualização do perfil</li><li>Avaliações do Google</li></ul></div>
+      </details>
+
+      <details class="reveal">
+        <summary>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></span>
+          <span class="ttl"><b>Cardápios Digitais</b><span>Para bares, restaurantes e lanchonetes</span></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="body"><ul><li>Cardápio com o estilo do seu negócio</li><li>Fotos dos itens e preços</li><li>Abre no celular do cliente na hora</li></ul></div>
+      </details>
+
+      <details class="reveal">
+        <summary>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="8" height="16" rx="2"/><rect x="13" y="4" width="8" height="16" rx="2"/></svg></span>
+          <span class="ttl"><b>Catálogos Digitais</b><span>Seus produtos em carrossel</span></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="body"><ul><li>Catálogo para Instagram e WhatsApp</li><li>Contato para pedidos no final</li><li>Visual profissional e padronizado</li></ul></div>
+      </details>
+
+      <details class="reveal">
+        <summary>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12a10 10 0 0114 0M8 15a6 6 0 018 0"/><circle cx="12" cy="18" r="1.2" fill="currentColor"/></svg></span>
+          <span class="ttl"><b>Plaquinhas NFC e QR Code</b><span>Aproximou ou escaneou, abriu</span></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="body"><ul><li>Para cardápio, catálogo ou avaliação</li><li>Funciona por aproximação (NFC) ou câmera (QR Code)</li><li>Plaquinha personalizada com a sua marca</li></ul></div>
+      </details>
+
+      <details class="reveal">
+        <summary>
+          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></span>
+          <span class="ttl"><b>Plaquinhas Padrão</b><span>Avaliação do Google no balcão</span></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="body"><ul><li>Cliente avalia sua loja em segundos</li><li>Mais avaliações no perfil do Google</li><li>Modelo pronto, é só colocar no balcão</li></ul></div>
+      </details>
+    </div>
+  </section>
+
+  <section class="tap reveal">
+    <h2 class="label" style="margin:0">Tecnologia na sua mesa</h2>
+    <h2>Um toque e o cliente já está <em>no seu cardápio.</em></h2>
+    <p>As plaquinhas da Nexa levam direto para o que você quer mostrar.</p>
+    <div class="modes">
+      <div class="mode">
+        <div class="anim nfc" aria-hidden="true"><i class="r"></i><i class="r"></i><i class="r"></i><i class="core"></i></div>
+        <b>NFC</b><span>Aproxima o celular da plaquinha.</span>
+      </div>
+      <div class="mode">
+        <div class="anim qr" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v1M14 20h1M18 18h3v3"/></svg>
+          <i class="scanline"></i>
+        </div>
+        <b>QR Code</b><span>Aponta a câmera e abre na hora.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact reveal">
+    <h2 class="label">Fale com a gente</h2>
+    <div class="num" id="num">+55 21 98739-7675</div>
+    <div class="row">
+      <a class="btn solid" href="https://wa.me/5521987397675" target="_blank" rel="noopener">Abrir WhatsApp</a>
+      <a class="btn" href="https://share.google/OAquC0Ht6a3SzPtiX" target="_blank" rel="noopener">Avaliar no Google</a>
+      <button class="btn" id="copy" type="button">Copiar número</button>
+    </div>
+  </section>
+
+  <footer>Nexa Store · @nexasstore.br</footer>
+</main>
+
+<script>
+(function () {
+  var btn = document.getElementById("copy");
+  var num = document.getElementById("num");
+  btn.addEventListener("click", function () {
+    var txt = "+55 21 98739-7675";
+    function selectIt() {
+      try { var r = document.createRange(); r.selectNodeContents(num); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); } catch (e) {}
+      btn.textContent = "Número selecionado";
+    }
+    try {
+      navigator.clipboard.writeText(txt).then(function () { btn.textContent = "Número copiado"; }, selectIt);
+    } catch (e) { selectIt(); }
+  });
+  try {
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      var hero = document.querySelector(".hero");
+      var lw = document.getElementById("lw");
+      hero.addEventListener("pointermove", function (e) {
+        var b = hero.getBoundingClientRect();
+        var x = (e.clientX - b.left) / b.width - 0.5;
+        var y = (e.clientY - b.top) / b.height - 0.5;
+        lw.style.transform = "perspective(700px) rotateY(" + (x * 14).toFixed(2) + "deg) rotateX(" + (-y * 14).toFixed(2) + "deg)";
+      });
+      hero.addEventListener("pointerleave", function () { lw.style.transform = ""; });
+    }
+  } catch (e) {}
+})();
+</script>
+
+</body></html>
